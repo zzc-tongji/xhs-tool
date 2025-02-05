@@ -90,7 +90,7 @@ const main = async () => {
     if (l) {
       await page.click('div.engage-bar svg.like-icon');
       await sleep(random(interactOption.likeTimeMs, interactOption.likeTimeMsOffset));
-      console.log(`main | ${interactOption.like ? '❤️ ' : '🤍'} [${i + 1}/${interactOption.list.length}] ${url} | ${interactOption.like ? 'LIKE' : 'DIS-LIKE'}`);
+      console.log(`main | ${interactOption.like > 0 ? '❤️ ' : '🤍'} [${i + 1}/${interactOption.list.length}] ${url} | ${interactOption.like > 0 ? 'LIKE' : 'DIS-LIKE'}`);
     }
     // collect
     const ch = await page.$eval('div.engage-bar svg.collect-icon use', (element) => {
@@ -100,7 +100,7 @@ const main = async () => {
     if (c) {
       await page.click('div.engage-bar svg.collect-icon');
       await sleep(random(interactOption.collectTimeMs, interactOption.collectTimeMsOffset));
-      console.log(`main | ${interactOption.collect ? '⭐' : '🔲'} [${i + 1}/${interactOption.list.length}] ${url} | ${interactOption.collect ? 'COLLECT' : 'DIS-COLLECT'}`);
+      console.log(`main | ${interactOption.collect  > 0 ? '⭐' : '🔲'} [${i + 1}/${interactOption.list.length}] ${url} | ${interactOption.collect  > 0 ? 'COLLECT' : 'DIS-COLLECT'}`);
     }
     //
     if (!l && !c) {

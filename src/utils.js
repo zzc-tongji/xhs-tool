@@ -29,7 +29,7 @@ const waitForUserLogin = async ({ page, pollingTimeMs }) => {
   }
   let temp = await user.$eval('a', (el) => el.getAttribute('href'));
   const userId = /^\/user\/profile\/(.*)$/.exec(temp)[1];
-  console.log(`waitForUserLogin | login as user [${userId}]`);
+  console.log(`waitForUserLogin | login as user [${userId}]                                 `);
   const cookieParam = (await page.cookies()).filter((c) => c.domain.endsWith('xiaohongshu.com'));
   return { userId, cookieParam, cookieHeader: cookieParam.map((c) => `${c.name}=${c.value}`).join('; ') };
 };
