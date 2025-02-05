@@ -49,4 +49,7 @@ fs.writeFileSync(path.resolve(argv.wkdir, 'summary.json'), JSON.stringify(summar
 const summaryCsv = 'ID,URL,Liked,Collection,Eagle\n' + Object.keys(summary).map(key => `${key},${summary[key].url},${summary[key].liked || false},${summary[key].collection || false},${summary[key].eagle || false}`).join('\n');
 fs.writeFileSync(path.resolve(argv.wkdir, 'summary.csv'), summaryCsv, { encoding: 'utf-8' });
 //
+const likedButNotCollection = Object.values(summary).filter(v => v.liked && !v.collection).map(v => v.url).join('\n');
+fs.writeFileSync(path.resolve(argv.wkdir, 'summary.liked-but-not-collection.txt'), likedButNotCollection, { encoding: 'utf-8' });
+//
 console.log('done');
