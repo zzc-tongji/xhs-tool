@@ -42,7 +42,7 @@ const main = async () => {
     }
     //
     allConfig.runtime.listPath = path.isAbsolute(argv.list) ? argv.list : path.resolve(allConfig.runtime.wkdir, argv.list);
-    allConfig.runtime.list = fs.readFileSync(allConfig.runtime.listPath, { encoding: 'utf-8' }).split('\n');
+    allConfig.runtime.list = fs.readFileSync(allConfig.runtime.listPath, { encoding: 'utf-8' }).split('\n').filter(s => s);
   } catch (error) {
     console.log(`invalid parameter | --setting="${argv.setting}" --wkdir="${argv.wkdir}" | ${error.message}`);
     return 1;
