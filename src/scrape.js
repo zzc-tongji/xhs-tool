@@ -8,7 +8,7 @@ import puppeteer from 'puppeteer-extra';
 import Stealth from 'puppeteer-extra-plugin-stealth';
 //
 import * as setting from './setting.js';
-import { waitForUserLogin } from './utils.js';
+import { sleep, waitForUserLogin } from './utils.js';
 
 const main = async () => {
   //
@@ -55,6 +55,7 @@ const main = async () => {
     scrollPixelOffset: 16,
     scrollIntervalMs: 100,
     scrollIntervalMsOffset: 16,
+    skipHumanVerification: false,
     ...allConfig.scrape,
   };
   if (allConfig.runtime.feedUrl) {
@@ -178,9 +179,16 @@ const main = async () => {
   //
   // collect url on current screen
   //
-  await page.$$('div.feeds-container:has(section.note-item) a.cover.ld.mask').then((elementHandlerList) => {
-    return Promise.all(elementHandlerList.map((elementHandler) => page.evaluate(el => el.href, elementHandler)));
-  }).then((urlList) => urlList.map((url) => {
+  let elementHandlerList;
+  while ((elementHandlerList = await page.$$('div.feeds-container:has(section.note-item) a.cover.ld.mask')).length <= 0) {
+    if (scrapeOption.skipHumanVerification) {
+      console.log('main | operation blocked by human verification');
+      break;
+    }
+    process.stdout.write('main | please pass human verification | polling after 10 second(s)\r');
+    await sleep(10000);
+  }
+  await Promise.all(elementHandlerList.map((elementHandler) => page.evaluate(el => el.href, elementHandler))).then((urlList) => urlList.map((url) => {
     let temp = /https:\/\/www.xiaohongshu.com\/user\/profile\/(.*)\/(.*)\?xsec_token=([^&]+)/.exec(url);
     temp && (noteUrlMap[temp[2]] = `https://www.xiaohongshu.com/explore/${temp[2]}?xsec_token=${temp[3]}`);
     temp = /https:\/\/www.xiaohongshu.com\/explore\/(.*)\?xsec_token=([^&]+)/.exec(url);
