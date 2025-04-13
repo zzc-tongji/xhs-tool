@@ -74,7 +74,7 @@ const main = async () => {
   puppeteer.use(Stealth());
   const browser = await puppeteer.launch(browserOption);
   const page = (await browser.pages())[0] || await browser.newPage();
-  await page.goto('https://xiaohongshu.com/', { waitUntil: 'networkidle2', timeout: 10000 });
+  await page.goto('https://xiaohongshu.com/', { waitUntil: 'networkidle2', timeout: 60000 });
   //
   // login and save cookie
   //
@@ -84,7 +84,7 @@ const main = async () => {
   //
   for (let i = 0; i < interactOption.list.length; i++) {
     const url = interactOption.list[i];
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 10000 });
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
     await sleep(random(interactOption.loadTimeMs, interactOption.loadTimeMsOffset));
     // like
     let likeElement;

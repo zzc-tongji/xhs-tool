@@ -71,7 +71,7 @@ const main = async () => {
   puppeteer.use(Stealth());
   const browser = await puppeteer.launch(browserOption);
   const page = (await browser.pages())[0] || await browser.newPage();
-  await page.goto('https://xiaohongshu.com/', { waitUntil: 'networkidle2', timeout: 10000 });
+  await page.goto('https://xiaohongshu.com/', { waitUntil: 'networkidle2', timeout: 60000 });
   //
   // login and save cookie
   //
@@ -174,7 +174,7 @@ const main = async () => {
   //
   // go to feed page
   //
-  await page.goto(scrapeOption.feedUrl, { waitUntil: 'networkidle2', timeout: 10000 });
+  await page.goto(scrapeOption.feedUrl, { waitUntil: 'networkidle2', timeout: 60000 });
   console.log(`main | page [${scrapeOption.feedUrl}] loaded for user [${userId}]`);
   //
   // collect url on current screen
