@@ -89,15 +89,15 @@ const main = async () => {
     scrapeOption.feedUrl = `https://www.xiaohongshu.com/user/profile/${userId}?tab=liked`;
   }
   //
-  let outputFileName = `data.${Date.now()}`;
+  let outputFileName = `data.xhs.${Date.now()}`;
   let temp;
   // eslint-disable-next-line no-cond-assign
   if (temp = /xiaohongshu.com\/user\/profile\/(.*)\?tab=(.*)$/.exec(scrapeOption.feedUrl)) {
-    outputFileName = `data.${temp[1]}.${temp[2] ? temp[2] : 'note'}`;
+    outputFileName = `data.xhs.${temp[1]}.${temp[2] ? temp[2] : 'note'}`;
   }
   // eslint-disable-next-line no-cond-assign
   else if (temp = /xiaohongshu.com\/explore(\?channel_id=(.*))?/.exec(scrapeOption.feedUrl)) {
-    outputFileName = `data.${userId}.explore.${temp[2] ? temp[2] : 'recommend'}`;
+    outputFileName = `data.xhs.${userId}.explore.${temp[2] ? temp[2] : 'recommend'}`;
   }
   //
   // prepare note url collection
