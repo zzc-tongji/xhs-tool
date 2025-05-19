@@ -167,8 +167,10 @@ const main = async () => {
     }
     process.stdout.write(`main | [${noteUrlMapLength}] note(s) scraped\r`);
     // next
-    clearTimeout(responseTimer);
     scrapeOption.maxNoteCount > 0 && noteUrlMapLength >= scrapeOption.maxNoteCount && finishCallback();
+    if (responseTimer) {
+      clearTimeout(responseTimer);
+    }
     responseTimer = setTimeout(finishCallback, scrapeOption.maxFetchIntervalMs);
   });
   //
@@ -200,6 +202,9 @@ const main = async () => {
   //
   // [BEGIN] start scroll on feed page
   //
+  if (responseTimer) {
+    clearTimeout(responseTimer);
+  }
   responseTimer = setTimeout(finishCallback, scrapeOption.maxFetchIntervalMs);
   page.evaluate(async (_scrapeOption) => {
     // [SCROLL] trigger page event 'response'

@@ -1,5 +1,5 @@
 {
-  "name": "xiaohongshu-scrapper",
+  "name": "xiaohongshu-tool",
   "version": "1.0.0",
   "scripts": {
     "eslint": "eslint --fix .",
