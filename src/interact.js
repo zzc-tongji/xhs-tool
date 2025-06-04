@@ -86,11 +86,21 @@ const main = async () => {
     const url = interactOption.list[i];
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
     await sleep(random(interactOption.loadTimeMs, interactOption.loadTimeMsOffset));
+    // 404
+    const u = await page.url();
+    if (u.includes('/404?')) {
+      console.log(`main | ❌ [${i + 1}/${interactOption.list.length}] ${url} | invalid xsec token`);
+      continue;
+    }
+    if (u.includes('/explore?source=404')) {
+      console.log(`main | ❌ [${i + 1}/${interactOption.list.length}] ${url} | note not found`);
+      continue;
+    }
     // like
     let likeElement;
     while (!(likeElement = await page.$('div.engage-bar svg.like-icon use'))) {
       if (interactOption.skipHumanVerification) {
-        console.log(`main | ❌ [${i + 1}/${interactOption.list.length}] ${url} | element [like] not found`);
+        console.log(`main | ❌ [${i + 1}/${interactOption.list.length}] ${url} | element [like] not found | human verification`);
         break;
       }
       process.stdout.write('main | please pass human verification | polling after 10 second(s)\r');
@@ -118,7 +128,7 @@ const main = async () => {
     if (c) {
       await page.click('div.engage-bar svg.collect-icon');
       await sleep(random(interactOption.collectTimeMs, interactOption.collectTimeMsOffset));
-      console.log(`main | ${interactOption.collect  > 0 ? '⭐' : '🔲'} [${i + 1}/${interactOption.list.length}] ${url} | ${interactOption.collect > 0 ? 'COLLECT' : 'DIS-COLLECT'}`);
+      console.log(`main | ${interactOption.collect > 0 ? '⭐' : '🔲'} [${i + 1}/${interactOption.list.length}] ${url} | ${interactOption.collect > 0 ? 'COLLECT' : 'DIS-COLLECT'}`);
     }
     //
     if (!l && !c) {
