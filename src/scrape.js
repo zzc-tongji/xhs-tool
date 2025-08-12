@@ -17,7 +17,7 @@ const main = async () => {
   const parser = new ArgumentParser({
     description: 'XHS Scrapper',
   });
-  parser.add_argument('--url', '-u', { help: 'feed url for fetching, "N" as user\'s note(笔记), "C" as user\'s (收藏), "L" as user\'s liked(点赞)' });
+  parser.add_argument('--url', '-u', { help: 'feed url for fetching, "N" as user\'s note(笔记), "C" as user\'s collection(收藏), "L" as user\'s liked(点赞)' });
   parser.add_argument('--setting', '-s', { help: 'setting for fetching, absolute path OR relative path based on "--wkdir"', default: './setting.xhs-tool.json' });
   parser.add_argument('--wkdir', '-w', { help: 'working directory', required: true });
   const argv = parser.parse_args();
