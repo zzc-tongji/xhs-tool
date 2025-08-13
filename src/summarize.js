@@ -6,8 +6,8 @@ import { ArgumentParser } from 'argparse';
 const parser = new ArgumentParser({
   description: 'XHS Summary',
 });
-parser.add_argument('--liked', '-l', { help: 'XHS note(s) liked (点赞), generated from "scrape.js"', default: './data.fav.json' });
-parser.add_argument('--collection', '-c', { help: 'XHS note(s) collection (收藏), generated from "scrape.js"', default: './data.liked.json' });
+parser.add_argument('--liked', '-l', { help: 'XHS note(s) liked(点赞), generated from "scrape.js"', default: './data.xhs.fav.json' });
+parser.add_argument('--collection', '-c', { help: 'XHS note(s) collection(收藏), generated from "scrape.js"', default: './data.xhs.liked.json' });
 parser.add_argument('--eagle', '-e', { help: 'stored XHS note(s) in Eagle, generated as "url-list.xiaohongshu.com.txt" from "media-to-eagle/tool/get-url-list.js"', default: '' });
 parser.add_argument('--wkdir', '-w', { help: 'working directory', required: true });
 const argv = parser.parse_args();
@@ -44,12 +44,12 @@ Object.keys(eagle).map((key) => {
   (!summary[key].url) && (summary[key].url = eagle[key]);
   summary[key].eagle = true;
 });
-fs.writeFileSync(path.resolve(argv.wkdir, 'summary.json'), JSON.stringify(summary, null, 2), { encoding: 'utf-8' });
+fs.writeFileSync(path.resolve(argv.wkdir, 'summary.xhs.json'), JSON.stringify(summary, null, 2), { encoding: 'utf-8' });
 //
 const summaryCsv = 'ID,URL,Liked,Collection,Eagle\n' + Object.keys(summary).map(key => `${key},${summary[key].url},${summary[key].liked || false},${summary[key].collection || false},${summary[key].eagle || false}`).join('\n');
-fs.writeFileSync(path.resolve(argv.wkdir, 'summary.csv'), summaryCsv, { encoding: 'utf-8' });
+fs.writeFileSync(path.resolve(argv.wkdir, 'summary.xhs.csv'), summaryCsv, { encoding: 'utf-8' });
 //
 const likedButNotCollection = Object.values(summary).filter(v => v.liked && !v.collection).map(v => v.url).join('\n');
-fs.writeFileSync(path.resolve(argv.wkdir, 'summary.liked-but-not-collection.txt'), likedButNotCollection, { encoding: 'utf-8' });
+fs.writeFileSync(path.resolve(argv.wkdir, 'summary.xhs.liked-but-not-collection.txt'), likedButNotCollection, { encoding: 'utf-8' });
 //
 console.log('done');
