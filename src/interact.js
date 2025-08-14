@@ -97,38 +97,44 @@ const main = async () => {
       continue;
     }
     // like
-    let likeElement;
-    while (!(likeElement = await page.$('div.engage-bar svg.like-icon use'))) {
-      if (interactOption.skipHumanVerification) {
-        console.log(`main | ❌ [${i + 1}/${interactOption.list.length}] ${url} | element [like] not found | human verification`);
-        break;
+    let l = false;
+    if (interactOption.like !== 0) {
+      let likeElement;
+      while (!(likeElement = await page.$('div.engage-bar svg.like-icon use'))) {
+        if (interactOption.skipHumanVerification) {
+          console.log(`main | ❌ [${i + 1}/${interactOption.list.length}] ${url} | element [like] not found | human verification`);
+          break;
+        }
+        process.stdout.write('main | please pass human verification | polling after 10 second(s)\r');
+        await sleep(10000);
       }
-      process.stdout.write('main | please pass human verification | polling after 10 second(s)\r');
-      await sleep(10000);
-    }
-    const likeHref = await page.evaluate(el => el.getAttributeNS('http://www.w3.org/1999/xlink', 'href'), likeElement);
-    const l = (interactOption.like * (likeHref === '#liked' ? 1 : -1) < 0);
-    if (l) {
-      await page.click('div.engage-bar svg.like-icon');
-      await sleep(random(interactOption.likeTimeMs, interactOption.likeTimeMsOffset));
-      console.log(`main | ${interactOption.like > 0 ? '❤️ ' : '🤍'} [${i + 1}/${interactOption.list.length}] ${url} | ${interactOption.like > 0 ? 'LIKE' : 'DIS-LIKE'}`);
+      const likeHref = await page.evaluate(el => el.getAttributeNS('http://www.w3.org/1999/xlink', 'href'), likeElement);
+      l = (interactOption.like * (likeHref === '#liked' ? 1 : -1) < 0);
+      if (l) {
+        await page.click('div.engage-bar svg.like-icon');
+        await sleep(random(interactOption.likeTimeMs, interactOption.likeTimeMsOffset));
+        console.log(`main | ${interactOption.like > 0 ? '❤️ ' : '🤍'} [${i + 1}/${interactOption.list.length}] ${url} | ${interactOption.like > 0 ? 'LIKE' : 'DIS-LIKE'}`);
+      }
     }
     // collect
-    let collectElement;
-    while (!(collectElement = await page.$('div.engage-bar svg.collect-icon use'))) {
-      if (interactOption.skipHumanVerification) {
-        console.log(`main | ❌ [${i + 1}/${interactOption.list.length}] ${url} | element [collect] not found`);
-        break;
+    let c = false;
+    if (interactOption.collect !== 0) {
+      let collectElement;
+      while (!(collectElement = await page.$('div.engage-bar svg.collect-icon use'))) {
+        if (interactOption.skipHumanVerification) {
+          console.log(`main | ❌ [${i + 1}/${interactOption.list.length}] ${url} | element [collect] not found`);
+          break;
+        }
+        process.stdout.write('main | please pass human verification | polling after 10 second(s)\r');
+        await sleep(10000);
       }
-      process.stdout.write('main | please pass human verification | polling after 10 second(s)\r');
-      await sleep(10000);
-    }
-    const collectHref = await page.evaluate(el => el.getAttributeNS('http://www.w3.org/1999/xlink', 'href'), collectElement);
-    const c = (interactOption.collect * (collectHref === '#collected' ? 1 : -1) < 0);
-    if (c) {
-      await page.click('div.engage-bar svg.collect-icon');
-      await sleep(random(interactOption.collectTimeMs, interactOption.collectTimeMsOffset));
-      console.log(`main | ${interactOption.collect > 0 ? '⭐' : '🔲'} [${i + 1}/${interactOption.list.length}] ${url} | ${interactOption.collect > 0 ? 'COLLECT' : 'DIS-COLLECT'}`);
+      const collectHref = await page.evaluate(el => el.getAttributeNS('http://www.w3.org/1999/xlink', 'href'), collectElement);
+      c = (interactOption.collect * (collectHref === '#collected' ? 1 : -1) < 0);
+      if (c) {
+        await page.click('div.engage-bar svg.collect-icon');
+        await sleep(random(interactOption.collectTimeMs, interactOption.collectTimeMsOffset));
+        console.log(`main | ${interactOption.collect > 0 ? '⭐' : '🔲'} [${i + 1}/${interactOption.list.length}] ${url} | ${interactOption.collect > 0 ? 'COLLECT' : 'DIS-COLLECT'}`);
+      }
     }
     //
     if (!l && !c) {
