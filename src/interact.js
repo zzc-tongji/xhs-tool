@@ -82,7 +82,7 @@ const main = async () => {
   fs.writeFileSync(path.resolve(allConfig.runtime.wkdir, 'cookie.xhs.json'), JSON.stringify(cookieParam, null, 2), { encoding: 'utf-8' });
   fs.writeFileSync(path.resolve(allConfig.runtime.wkdir, 'cookie.xhs.header.txt'), cookieHeader, { encoding: 'utf-8' });
   //
-  for (let i = 0; i < interactOption.list.length; i++) {
+  loop: for (let i = 0; i < interactOption.list.length; i++) {
     const url = interactOption.list[i];
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
     await sleep(random(interactOption.loadTimeMs, interactOption.loadTimeMsOffset));
@@ -103,7 +103,7 @@ const main = async () => {
       while (!(likeElement = await page.$('div.engage-bar svg.like-icon use'))) {
         if (interactOption.skipHumanVerification) {
           console.log(`main | ❌ [${i + 1}/${interactOption.list.length}] ${url} | element [like] not found | human verification`);
-          break;
+          continue loop;
         }
         process.stdout.write('main | please pass human verification | polling after 10 second(s)\r');
         await sleep(10000);
@@ -123,7 +123,7 @@ const main = async () => {
       while (!(collectElement = await page.$('div.engage-bar svg.collect-icon use'))) {
         if (interactOption.skipHumanVerification) {
           console.log(`main | ❌ [${i + 1}/${interactOption.list.length}] ${url} | element [collect] not found`);
-          break;
+          continue loop;
         }
         process.stdout.write('main | please pass human verification | polling after 10 second(s)\r');
         await sleep(10000);
