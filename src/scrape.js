@@ -84,15 +84,15 @@ const main = async () => {
   if (scrapeOption.feedUrl === 'N') {
     scrapeOption.feedUrl = `https://www.xiaohongshu.com/user/profile/${userId}?tab=note`;
   } else if (scrapeOption.feedUrl === 'C') {
-    scrapeOption.feedUrl = `https://www.xiaohongshu.com/user/profile/${userId}?tab=fav`;
+    scrapeOption.feedUrl = `https://www.xiaohongshu.com/user/profile/${userId}?tab=fav&subTab=note`;
   } else if (scrapeOption.feedUrl === 'L') {
-    scrapeOption.feedUrl = `https://www.xiaohongshu.com/user/profile/${userId}?tab=liked`;
+    scrapeOption.feedUrl = `https://www.xiaohongshu.com/user/profile/${userId}?tab=liked&subTab=note`;
   }
   //
   let outputFileName = `data.xhs.${Date.now()}`;
   let temp;
   // eslint-disable-next-line no-cond-assign
-  if (temp = /xiaohongshu.com\/user\/profile\/(.*)\?tab=(.*)$/.exec(scrapeOption.feedUrl)) {
+  if (temp = /xiaohongshu.com\/user\/profile\/(.*)\?tab=(.*)&+/.exec(scrapeOption.feedUrl)) {
     outputFileName = `data.xhs.${temp[1]}.${temp[2] ? temp[2] : 'note'}`;
   }
   // eslint-disable-next-line no-cond-assign
