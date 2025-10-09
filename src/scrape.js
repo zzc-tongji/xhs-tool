@@ -176,6 +176,7 @@ const main = async () => {
   //
   // go to feed page
   //
+  await page.goto(scrapeOption.feedUrl.split('?')[0], { waitUntil: 'networkidle2', timeout: 60000 });
   await page.goto(scrapeOption.feedUrl, { waitUntil: 'networkidle2', timeout: 60000 });
   console.log(`main | page [${scrapeOption.feedUrl}] loaded for user [${userId}]`);
   //
