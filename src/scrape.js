@@ -8,7 +8,7 @@ import puppeteer from 'puppeteer-extra';
 import Stealth from 'puppeteer-extra-plugin-stealth';
 //
 import * as setting from './setting.js';
-import { sleep, waitForUserLogin } from './utils.js';
+import { random, sleep, waitForUserLogin } from './utils.js';
 
 const main = async () => {
   //
@@ -82,10 +82,13 @@ const main = async () => {
   // feed page url and output file
   //
   if (scrapeOption.feedUrl === 'N') {
+    scrapeOption.feedMark = 'N';
     scrapeOption.feedUrl = `https://www.xiaohongshu.com/user/profile/${userId}?tab=note`;
   } else if (scrapeOption.feedUrl === 'C') {
+    scrapeOption.feedMark = 'C';
     scrapeOption.feedUrl = `https://www.xiaohongshu.com/user/profile/${userId}?tab=fav&subTab=note`;
   } else if (scrapeOption.feedUrl === 'L') {
+    scrapeOption.feedMark = 'L';
     scrapeOption.feedUrl = `https://www.xiaohongshu.com/user/profile/${userId}?tab=liked&subTab=note`;
   }
   //
@@ -118,7 +121,7 @@ const main = async () => {
       const keyList = Object.keys(noteUrlMap);
       const noteUrlMapRev = {};
       for (let i = keyList.length - 1; i >= 0; i--) {
-        noteUrlMapRev[keyList[i]]=noteUrlMap[keyList[i]];
+        noteUrlMapRev[keyList[i]] = noteUrlMap[keyList[i]];
       }
       //
       const json = `${allConfig.runtime.wkdir}${path.sep}${outputFileName}.json`;
@@ -176,8 +179,23 @@ const main = async () => {
   //
   // go to feed page
   //
-  await page.goto(scrapeOption.feedUrl.split('?')[0], { waitUntil: 'networkidle2', timeout: 60000 });
-  await page.goto(scrapeOption.feedUrl, { waitUntil: 'networkidle2', timeout: 60000 });
+  if (scrapeOption.feedMark === 'N' || scrapeOption.feedMark === 'C' || scrapeOption.feedMark === 'L') {
+    // user note
+    await page.goto(scrapeOption.feedUrl.split('?')[0], { waitUntil: 'networkidle2', timeout: 60000 });
+    //
+    const ncl = await page.$$('div.reds-tab-item.sub-tab-list');
+    if (scrapeOption.feedMark === 'C') {
+      // user connection
+      await ncl[1].click();
+      await sleep(random(5000, 1000));
+    } else if (scrapeOption.feedMark === 'L') {
+      // user liked
+      await ncl[2].click();
+      await sleep(random(5000, 1000));
+    }
+  } else {
+    await page.goto(scrapeOption.feedUrl, { waitUntil: 'networkidle2', timeout: 60000 });
+  }
   console.log(`main | page [${scrapeOption.feedUrl}] loaded for user [${userId}]`);
   //
   // collect url on current screen
