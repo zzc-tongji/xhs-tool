@@ -59,6 +59,9 @@ const main = async () => {
     likeTimeMsOffset: 500,
     collectTimeMs: 5000,
     collectTimeMsOffset: 500,
+    pauseEvery: 50,
+    pauseTimeMs: 60000,
+    pausetTimeMsOffset: 6000,
     skipHumanVerification: false,
     ...allConfig.interact,
     collect: allConfig.runtime.collect,
@@ -139,6 +142,10 @@ const main = async () => {
     //
     if (!l && !c) {
       console.log(`main | ☑️  [${i + 1}/${interactOption.list.length}] ${url} | SKIP`);
+    }
+    if ((i + 1) % interactOption.pauseEvery === 0) {
+      console.log(`main | ⏸️  pause after ${interactOption.pauseEvery} post(s) handled`);
+      await sleep(random(interactOption.pauseTimeMs, interactOption.pausetTimeMsOffset));
     }
   }
   console.log('main | done');
